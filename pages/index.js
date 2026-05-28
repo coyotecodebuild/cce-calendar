@@ -4,13 +4,14 @@ import Calendar from '../components/Calendar'
 import EventList from '../components/EventList'
 import Header from '../components/Header'
 import GradeFilter, { filterEventsByGrade } from '../components/GradeFilter'
+import ThisWeek from '../components/ThisWeek'
 
 export default function Home() {
   const [events, setEvents] = useState([])
   const [lastUpdated, setLastUpdated] = useState(null)
   const [emailCount, setEmailCount] = useState(0)
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState('calendar')
+  const [activeTab, setActiveTab] = useState('week')
   const [filter, setFilter] = useState('all')
   const [selectedGrades, setSelectedGrades] = useState([])
   const [selectedDay, setSelectedDay] = useState(null)
@@ -49,6 +50,12 @@ export default function Home() {
     const d = new Date(e.date + 'T12:00:00')
     return d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear()
   })
+
+  const tabs = [
+    { key: 'week', label: '📆 This Week' },
+    { key: 'calendar', label: '📅 Calendar' },
+    { key: 'list', label: '📋 List' },
+  ]
 
   return (
     <>
@@ -93,19 +100,19 @@ export default function Home() {
           marginBottom: 16,
           gap: 4
         }}>
-          {['calendar', 'list'].map(tab => (
-            <button key={tab} onClick={() => setActiveTab(tab)} style={{
-              padding: '10px 16px',
-              fontSize: 14,
+          {tabs.map(tab => (
+            <button key={tab.key} onClick={() => setActiveTab(tab.key)} style={{
+              padding: '10px 14px',
+              fontSize: 13,
               background: 'none',
               border: 'none',
-              borderBottom: activeTab === tab ? '2px solid #1a9e8f' : '2px solid transparent',
-              color: activeTab === tab ? '#1a9e8f' : '#888',
-              fontWeight: activeTab === tab ? 600 : 400,
-              textTransform: 'capitalize',
-              marginBottom: -1
+              borderBottom: activeTab === tab.key ? '2px solid #1a9e8f' : '2px solid transparent',
+              color: activeTab === tab.key ? '#1a9e8f' : '#888',
+              fontWeight: activeTab === tab.key ? 600 : 400,
+              marginBottom: -1,
+              whiteSpace: 'nowrap'
             }}>
-              {tab === 'calendar' ? '📅 Calendar' : '📋 List'}
+              {tab.label}
             </button>
           ))}
         </div>
@@ -170,6 +177,7 @@ export default function Home() {
           </div>
         ) : (
           <>
+            {activeTab === 'week' && <ThisWeek events={filtered} />}
             {activeTab === 'calendar' && (
               <Calendar
                 events={filtered}
@@ -177,9 +185,7 @@ export default function Home() {
                 onSelectDay={setSelectedDay}
               />
             )}
-            {activeTab === 'list' && (
-              <EventList events={filtered} />
-            )}
+            {activeTab === 'list' && <EventList events={filtered} />}
           </>
         )}
       </div>
