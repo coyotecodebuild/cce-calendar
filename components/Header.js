@@ -21,15 +21,15 @@ export default function Header({ lastUpdated, emailCount, onRefresh }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{
             width: 44, height: 44, borderRadius: '50%',
-            background: '#e8f7f5',
+            background: 'var(--status-bg)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: 22
           }}>🏫</div>
           <div>
-            <div style={{ fontSize: 18, fontWeight: 700, color: '#1a1a1a' }}>
+            <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--text)' }}>
               Coyote Creek Calendar
             </div>
-            <div style={{ fontSize: 12, color: '#888' }}>
+            <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
               Douglas County School District
             </div>
           </div>
@@ -37,14 +37,11 @@ export default function Header({ lastUpdated, emailCount, onRefresh }) {
 
         <button onClick={handleRefresh} disabled={refreshing} style={{
           display: 'flex', alignItems: 'center', gap: 6,
-          padding: '8px 14px',
-          borderRadius: 8,
-          border: '1px solid #ddd',
-          background: 'white',
-          fontSize: 13,
-          fontWeight: 500,
-          color: '#444',
-          boxShadow: '0 1px 2px rgba(0,0,0,0.06)'
+          padding: '8px 14px', borderRadius: 8,
+          border: '1px solid var(--border-mid)',
+          background: 'var(--card)', fontSize: 13,
+          fontWeight: 500, color: 'var(--text-muted)',
+          boxShadow: 'var(--shadow)'
         }}>
           <span style={{
             display: 'inline-block',
@@ -56,16 +53,13 @@ export default function Header({ lastUpdated, emailCount, onRefresh }) {
 
       <div style={{
         display: 'flex', alignItems: 'center', gap: 8,
-        background: '#e8f7f5',
-        borderRadius: 8,
-        padding: '8px 12px',
-        marginTop: 12,
-        fontSize: 12,
-        color: '#0f6e62'
+        background: 'var(--status-bg)', borderRadius: 8,
+        padding: '8px 12px', marginTop: 12,
+        fontSize: 12, color: 'var(--status-text)'
       }}>
         <span style={{
           width: 7, height: 7, borderRadius: '50%',
-          background: '#1a9e8f', display: 'inline-block', flexShrink: 0
+          background: 'var(--teal)', display: 'inline-block', flexShrink: 0
         }} />
         {lastSync
           ? `Last updated ${lastSync} · ${emailCount} emails scanned`
