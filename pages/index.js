@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Calendar from '../components/Calendar'
 import EventList from '../components/EventList'
 import Header from '../components/Header'
+import GradeFilter, { filterEventsByGrade } from '../components/GradeFilter'
 
 export default function Home() {
   const [events, setEvents] = useState([])
@@ -11,6 +12,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('calendar')
   const [filter, setFilter] = useState('all')
+  const [selectedGrades, setSelectedGrades] = useState([])
   const [selectedDay, setSelectedDay] = useState(null)
 
   useEffect(() => {
@@ -31,17 +33,19 @@ export default function Home() {
     setLoading(false)
   }
 
-  const filtered = filter === 'all'
+  const categoryFiltered = filter === 'all'
     ? events
     : events.filter(e => e.category === filter)
 
+  const filtered = filterEventsByGrade(categoryFiltered, selectedGrades)
+
   const today = new Date()
-  const upcoming = events.filter(e => {
+  const upcoming = filtered.filter(e => {
     const d = new Date(e.date + 'T12:00:00')
     const diff = (d - today) / 86400000
     return diff >= 0 && diff <= 7
   })
-  const thisMonth = events.filter(e => {
+  const thisMonth = filtered.filter(e => {
     const d = new Date(e.date + 'T12:00:00')
     return d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear()
   })
@@ -67,7 +71,7 @@ export default function Home() {
           marginBottom: 20
         }}>
           {[
-            { label: 'Total events', value: events.length },
+            { label: 'Total events', value: filtered.length },
             { label: 'This month', value: thisMonth.length },
             { label: 'Next 7 days', value: upcoming.length },
           ].map(s => (
@@ -106,7 +110,7 @@ export default function Home() {
           ))}
         </div>
 
-        <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap', alignItems: 'center' }}>
           {[
             { key: 'all', label: 'All' },
             { key: 'holiday', label: '🔴 No school' },
@@ -127,7 +131,28 @@ export default function Home() {
               {f.label}
             </button>
           ))}
+
+          <div style={{ width: 1, height: 20, background: '#eee', margin: '0 2px' }} />
+
+          <GradeFilter
+            selectedGrades={selectedGrades}
+            onChange={(grades) => {
+              setSelectedGrades(grades)
+              setSelectedDay(null)
+            }}
+          />
         </div>
+
+        {selectedGrades.length > 0 && (
+          <div style={{
+            fontSize: 12, color: '#1a9e8f',
+            marginBottom: 12, marginTop: -8,
+            display: 'flex', alignItems: 'center', gap: 6
+          }}>
+            <span>Showing events for: <strong>{selectedGrades.join(', ')} Grade</strong></span>
+            <span style={{ color: '#aaa' }}>· School-wide events always shown</span>
+          </div>
+        )}
 
         {loading ? (
           <div style={{ textAlign: 'center', padding: 40, color: '#888' }}>
