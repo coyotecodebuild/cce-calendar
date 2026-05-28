@@ -23,33 +23,33 @@ export default function EventCard({ event: ev }) {
 
   return (
     <div style={{
-      background: 'white',
+      background: 'var(--card)',
       borderRadius: 12,
       padding: '12px 14px',
       display: 'flex',
       alignItems: 'flex-start',
       gap: 12,
-      boxShadow: '0 1px 3px rgba(0,0,0,0.07)',
+      boxShadow: 'var(--shadow)',
       borderLeft: `4px solid ${color}`
     }}>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{
           fontSize: 14, fontWeight: 600,
-          color: '#1a1a1a', marginBottom: 4
+          color: 'var(--text)', marginBottom: 4
         }}>{ev.title}</div>
         <div style={{
-          fontSize: 12, color: '#888',
+          fontSize: 12, color: 'var(--text-muted)',
           display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center'
         }}>
           <span>📅 {dateStr}</span>
           {ev.time && <span>🕐 {ev.time}</span>}
-          {ev.notes && <span style={{ color: '#aaa' }}>{ev.notes}</span>}
+          {ev.notes && <span style={{ color: 'var(--text-faint)' }}>{ev.notes}</span>}
         </div>
       </div>
       <div style={{
         fontSize: 11, padding: '3px 8px',
         borderRadius: 10,
-        background: color + '20',
+        background: color + '22',
         color: color,
         fontWeight: 600,
         whiteSpace: 'nowrap',
