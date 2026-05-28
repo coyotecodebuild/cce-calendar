@@ -47,17 +47,21 @@ export default function Calendar({ events, selectedDay, onSelectDay }) {
         marginBottom: 10
       }}>
         <button onClick={() => changeMonth(-1)} style={{
-          width: 32, height: 32, borderRadius: 8, border: '1px solid #ddd',
-          background: 'white', fontSize: 18, display: 'flex',
-          alignItems: 'center', justifyContent: 'center'
+          width: 32, height: 32, borderRadius: 8,
+          border: '1px solid var(--border-mid)',
+          background: 'var(--card)', fontSize: 18,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: 'var(--text)'
         }}>‹</button>
-        <span style={{ fontWeight: 600, fontSize: 16 }}>
+        <span style={{ fontWeight: 600, fontSize: 16, color: 'var(--text)' }}>
           {MONTHS[month]} {year}
         </span>
         <button onClick={() => changeMonth(1)} style={{
-          width: 32, height: 32, borderRadius: 8, border: '1px solid #ddd',
-          background: 'white', fontSize: 18, display: 'flex',
-          alignItems: 'center', justifyContent: 'center'
+          width: 32, height: 32, borderRadius: 8,
+          border: '1px solid var(--border-mid)',
+          background: 'var(--card)', fontSize: 18,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: 'var(--text)'
         }}>›</button>
       </div>
 
@@ -65,7 +69,7 @@ export default function Calendar({ events, selectedDay, onSelectDay }) {
         {DAYS.map(d => (
           <div key={d} style={{
             textAlign: 'center', fontSize: 11,
-            color: '#999', padding: '4px 0', fontWeight: 500
+            color: 'var(--text-faint)', padding: '4px 0', fontWeight: 500
           }}>{d}</div>
         ))}
       </div>
@@ -74,9 +78,9 @@ export default function Calendar({ events, selectedDay, onSelectDay }) {
         {Array.from({ length: firstDay }).map((_, i) => (
           <div key={`prev-${i}`} style={{
             minHeight: 56, padding: 4, borderRadius: 8,
-            background: 'white', opacity: 0.3
+            background: 'var(--card)', opacity: 0.3
           }}>
-            <div style={{ fontSize: 11, color: '#999' }}>{prevDays - firstDay + 1 + i}</div>
+            <div style={{ fontSize: 11, color: 'var(--text-faint)' }}>{prevDays - firstDay + 1 + i}</div>
           </div>
         ))}
 
@@ -91,53 +95,11 @@ export default function Calendar({ events, selectedDay, onSelectDay }) {
             <div key={day} onClick={() => hasEvents && onSelectDay(isSel ? null : day)}
               style={{
                 minHeight: 56, padding: 4, borderRadius: 8,
-                background: isToday ? '#e8f7f5' : 'white',
-                border: isSel ? '2px solid #1a9e8f' : isToday ? '1px solid #1a9e8f' : '1px solid #eee',
+                background: isToday ? 'var(--status-bg)' : 'var(--card)',
+                border: isSel ? '2px solid var(--teal)' : isToday ? '1px solid var(--teal)' : '1px solid var(--border)',
                 cursor: hasEvents ? 'pointer' : 'default',
                 transition: 'border-color 0.1s'
               }}>
               <div style={{
                 fontSize: 11,
-                color: isToday ? '#1a9e8f' : '#666',
-                fontWeight: isToday ? 600 : 400,
-                marginBottom: 2
-              }}>{day}</div>
-              {dayEvs.slice(0, 3).map((ev, idx) => (
-                <div key={idx} style={{
-                  width: 6, height: 6, borderRadius: '50%',
-                  background: COLORS[ev.category] || COLORS.other,
-                  margin: '1px auto'
-                }} />
-              ))}
-            </div>
-          )
-        })}
-
-        {Array.from({ length: (7 - ((firstDay + daysInMonth) % 7)) % 7 }).map((_, i) => (
-          <div key={`next-${i}`} style={{
-            minHeight: 56, padding: 4, borderRadius: 8,
-            background: 'white', opacity: 0.3
-          }}>
-            <div style={{ fontSize: 11, color: '#999' }}>{i + 1}</div>
-          </div>
-        ))}
-      </div>
-
-      {selectedDay && selectedEvents.length > 0 && (
-        <div style={{ marginTop: 16 }}>
-          <div style={{
-            fontSize: 12, fontWeight: 600, color: '#888',
-            textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 10
-          }}>
-            {new Date(year, month, selectedDay).toLocaleDateString('en-US', {
-              weekday: 'long', month: 'long', day: 'numeric'
-            })}
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {selectedEvents.map((ev, i) => <EventCard key={i} event={ev} />)}
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
+                color: isToday ? 'var(--teal)' : 'var(--text-muted)',
