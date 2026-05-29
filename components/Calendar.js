@@ -156,3 +156,4 @@ export default function Calendar({ events, selectedDay, onSelectDay }) {
     </div>
   )
 }
+
