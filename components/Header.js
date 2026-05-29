@@ -16,54 +16,51 @@ export default function Header({ lastUpdated, emailCount, onRefresh }) {
     : null
 
   return (
-    <div style={{ paddingTop: 24, paddingBottom: 20 }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+    <div style={{ paddingTop: 28, paddingBottom: 20 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div>
           <div style={{
-            width: 44, height: 44, borderRadius: '50%',
-            background: 'var(--status-bg)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 22
-          }}>🏫</div>
-          <div>
-            <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--text)' }}>
-              Coyote Creek Calendar
-            </div>
-            <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-              Douglas County School District
-            </div>
+            fontSize: 11, fontWeight: 700, letterSpacing: '0.12em',
+            textTransform: 'uppercase', color: 'var(--teal)',
+            marginBottom: 4
+          }}>Coyote Creek Elementary</div>
+          <div style={{ fontSize: 28, fontWeight: 800, color: 'var(--text)', lineHeight: 1.1 }}>
+            School Calendar
+          </div>
+          <div style={{ fontSize: 12, color: 'var(--text-faint)', marginTop: 4 }}>
+            Douglas County School District
           </div>
         </div>
 
         <button onClick={handleRefresh} disabled={refreshing} style={{
-          display: 'flex', alignItems: 'center', gap: 6,
-          padding: '8px 14px', borderRadius: 8,
+          width: 40, height: 40, borderRadius: '50%',
           border: '1px solid var(--border-mid)',
-          background: 'var(--card)', fontSize: 13,
-          fontWeight: 500, color: 'var(--text-muted)',
-          boxShadow: 'var(--shadow)'
+          background: 'var(--card)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 16, boxShadow: 'var(--shadow)'
         }}>
           <span style={{
             display: 'inline-block',
             animation: refreshing ? 'spin 1s linear infinite' : 'none'
           }}>🔄</span>
-          {refreshing ? 'Loading...' : 'Refresh'}
         </button>
       </div>
 
       <div style={{
-        display: 'flex', alignItems: 'center', gap: 8,
-        background: 'var(--status-bg)', borderRadius: 8,
-        padding: '8px 12px', marginTop: 12,
-        fontSize: 12, color: 'var(--status-text)'
+        display: 'inline-flex', alignItems: 'center', gap: 6,
+        background: 'var(--status-bg)',
+        borderRadius: 20, padding: '5px 12px',
+        marginTop: 14, fontSize: 11,
+        color: 'var(--status-text)', fontWeight: 500
       }}>
         <span style={{
-          width: 7, height: 7, borderRadius: '50%',
-          background: 'var(--teal)', display: 'inline-block', flexShrink: 0
+          width: 6, height: 6, borderRadius: '50%',
+          background: '#4fd1c5', display: 'inline-block',
+          boxShadow: '0 0 6px #4fd1c5'
         }} />
         {lastSync
-          ? `Last updated ${lastSync} · ${emailCount} emails scanned`
-          : 'Waiting for first sync from Danny'
+          ? `Synced ${lastSync} · ${emailCount} emails`
+          : 'Waiting for first sync'
         }
       </div>
 
