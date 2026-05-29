@@ -50,7 +50,7 @@ export default function GradeFilter({ selectedGrades, onChange }) {
         fontSize: 12, fontWeight: hasSelection ? 600 : 400,
         display: 'flex', alignItems: 'center', gap: 4, whiteSpace: 'nowrap'
       }}>
-        🎓 {label}
+        {label}
         <span style={{ fontSize: 10 }}>{open ? '▲' : '▼'}</span>
       </button>
 
@@ -88,4 +88,43 @@ export default function GradeFilter({ selectedGrades, onChange }) {
                 All grades
               </button>
 
-              {GRADES.
+              {GRADES.map(grade => {
+                const selected = selectedGrades.includes(grade)
+                return (
+                  <button key={grade} onClick={() => toggleGrade(grade)} style={{
+                    display: 'flex', alignItems: 'center', gap: 8,
+                    padding: '6px 8px', borderRadius: 8, border: 'none',
+                    background: selected ? 'var(--chip-active-bg)' : 'transparent',
+                    color: selected ? 'var(--chip-active-text)' : 'var(--text)',
+                    fontSize: 13, fontWeight: selected ? 600 : 400,
+                    textAlign: 'left', cursor: 'pointer'
+                  }}>
+                    <span style={{
+                      width: 16, height: 16, borderRadius: 4, border: '2px solid',
+                      borderColor: selected ? 'var(--teal)' : 'var(--border-mid)',
+                      background: selected ? 'var(--teal)' : 'transparent',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
+                    }}>
+                      {selected && <span style={{ color: 'white', fontSize: 10 }}>✓</span>}
+                    </span>
+                    {grade} Grade
+                  </button>
+                )
+              })}
+            </div>
+
+            {hasSelection && (
+              <button onClick={() => { onChange([]); setOpen(false) }} style={{
+                marginTop: 10, width: '100%', padding: '6px 0', borderRadius: 8,
+                border: '1px solid var(--border)', background: 'transparent',
+                color: 'var(--text-muted)', fontSize: 12, cursor: 'pointer'
+              }}>
+                Clear grade filter
+              </button>
+            )}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
