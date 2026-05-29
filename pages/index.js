@@ -16,9 +16,7 @@ export default function Home() {
   const [selectedGrades, setSelectedGrades] = useState([])
   const [selectedDay, setSelectedDay] = useState(null)
 
-  useEffect(() => {
-    fetchEvents()
-  }, [])
+  useEffect(() => { fetchEvents() }, [])
 
   async function fetchEvents() {
     setLoading(true)
@@ -34,10 +32,7 @@ export default function Home() {
     setLoading(false)
   }
 
-  const categoryFiltered = filter === 'all'
-    ? events
-    : events.filter(e => e.category === filter)
-
+  const categoryFiltered = filter === 'all' ? events : events.filter(e => e.category === filter)
   const filtered = filterEventsByGrade(categoryFiltered, selectedGrades)
 
   const today = new Date()
@@ -52,9 +47,17 @@ export default function Home() {
   })
 
   const tabs = [
-    { key: 'week', label: '📆 This Week' },
-    { key: 'calendar', label: '📅 Calendar' },
-    { key: 'list', label: '📋 List' },
+    { key: 'week', label: 'This Week' },
+    { key: 'calendar', label: 'Calendar' },
+    { key: 'list', label: 'All Events' },
+  ]
+
+  const categoryFilters = [
+    { key: 'all', label: 'All', color: null },
+    { key: 'holiday', label: 'No School', color: '#e24b4a' },
+    { key: 'event', label: 'Events', color: '#378add' },
+    { key: 'deadline', label: 'Deadlines', color: '#ef9f27' },
+    { key: 'early', label: 'Early Release', color: '#4caf7d' },
   ]
 
   return (
@@ -64,126 +67,136 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content="School events for Coyote Creek Elementary - Douglas County School District" />
         <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <meta name="theme-color" content="#1a9e8f" />
+        <meta name="theme-color" content="#0a0a0b" />
       </Head>
 
-      <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 16px 40px' }}>
+      <div style={{ maxWidth: 680, margin: '0 auto', padding: '0 16px 60px' }}>
         <Header lastUpdated={lastUpdated} emailCount={emailCount} onRefresh={fetchEvents} />
 
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: 10,
-          marginBottom: 20
+          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: 10, marginBottom: 24
         }}>
           {[
-            { label: 'Total events', value: filtered.length },
-            { label: 'This month', value: thisMonth.length },
-            { label: 'Next 7 days', value: upcoming.length },
+            { label: 'TOTAL', value: filtered.length },
+            { label: 'THIS MONTH', value: thisMonth.length },
+            { label: 'THIS WEEK', value: upcoming.length },
           ].map(s => (
             <div key={s.label} style={{
-              background: 'white',
-              borderRadius: 10,
-              padding: '12px 14px',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.08)'
+              background: 'var(--card)',
+              borderRadius: 12, padding: '14px 16px',
+              border: '1px solid var(--card-border)'
             }}>
-              <div style={{ fontSize: 11, color: '#888', marginBottom: 4 }}>{s.label}</div>
-              <div style={{ fontSize: 26, fontWeight: 600, color: '#1a9e8f' }}>{s.value}</div>
+              <div style={{
+                fontSize: 10, fontWeight: 700, letterSpacing: '0.1em',
+                color: 'var(--text-faint)', marginBottom: 6
+              }}>{s.label}</div>
+              <div style={{
+                fontSize: 30, fontWeight: 800, color: 'var(--teal)',
+                lineHeight: 1
+              }}>{s.value}</div>
             </div>
           ))}
         </div>
 
         <div style={{
-          display: 'flex',
-          borderBottom: '1px solid #eee',
-          marginBottom: 16,
-          gap: 4
+          display: 'flex', gap: 4,
+          background: 'var(--card)',
+          borderRadius: 12, padding: 4,
+          marginBottom: 20,
+          border: '1px solid var(--card-border)'
         }}>
           {tabs.map(tab => (
             <button key={tab.key} onClick={() => setActiveTab(tab.key)} style={{
-              padding: '10px 14px',
-              fontSize: 13,
-              background: 'none',
-              border: 'none',
-              borderBottom: activeTab === tab.key ? '2px solid #1a9e8f' : '2px solid transparent',
-              color: activeTab === tab.key ? '#1a9e8f' : '#888',
-              fontWeight: activeTab === tab.key ? 600 : 400,
-              marginBottom: -1,
-              whiteSpace: 'nowrap'
+              flex: 1, padding: '9px 8px',
+              fontSize: 13, fontWeight: 600,
+              background: activeTab === tab.key ? 'var(--teal)' : 'transparent',
+              border: 'none', borderRadius: 9,
+              color: activeTab === tab.key ? 'white' : 'var(--text-muted)',
+              transition: 'all 0.15s'
             }}>
               {tab.label}
             </button>
           ))}
         </div>
 
-        <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap', alignItems: 'center' }}>
-          {[
-            { key: 'all', label: 'All' },
-            { key: 'holiday', label: '🔴 No school' },
-            { key: 'event', label: '🔵 Events' },
-            { key: 'deadline', label: '🟡 Deadlines' },
-            { key: 'early', label: '🟢 Early release' },
-          ].map(f => (
+        <div style={{
+          display: 'flex', gap: 6, marginBottom: 16,
+          flexWrap: 'wrap', alignItems: 'center'
+        }}>
+          {categoryFilters.map(f => (
             <button key={f.key} onClick={() => setFilter(f.key)} style={{
-              padding: '5px 12px',
-              borderRadius: 20,
+              padding: '5px 12px', borderRadius: 20,
               border: '1px solid',
-              borderColor: filter === f.key ? '#1a9e8f' : '#ddd',
-              background: filter === f.key ? '#e8f7f5' : 'white',
-              color: filter === f.key ? '#1a9e8f' : '#666',
-              fontSize: 12,
-              fontWeight: filter === f.key ? 600 : 400
+              borderColor: filter === f.key
+                ? (f.color || 'var(--teal)')
+                : 'var(--border-mid)',
+              background: filter === f.key
+                ? (f.color ? f.color + '22' : 'var(--chip-active-bg)')
+                : 'var(--chip-bg)',
+              color: filter === f.key
+                ? (f.color || 'var(--chip-active-text)')
+                : 'var(--text-muted)',
+              fontSize: 12, fontWeight: filter === f.key ? 700 : 400,
+              display: 'flex', alignItems: 'center', gap: 5
             }}>
+              {f.color && (
+                <span style={{
+                  width: 6, height: 6, borderRadius: '50%',
+                  background: f.color, display: 'inline-block',
+                  boxShadow: filter === f.key ? `0 0 5px ${f.color}` : 'none'
+                }} />
+              )}
               {f.label}
             </button>
           ))}
 
-          <div style={{ width: 1, height: 20, background: '#eee', margin: '0 2px' }} />
+          <div style={{ width: 1, height: 18, background: 'var(--border-mid)' }} />
 
           <GradeFilter
             selectedGrades={selectedGrades}
-            onChange={(grades) => {
-              setSelectedGrades(grades)
-              setSelectedDay(null)
-            }}
+            onChange={(grades) => { setSelectedGrades(grades); setSelectedDay(null) }}
           />
         </div>
 
         {selectedGrades.length > 0 && (
           <div style={{
-            fontSize: 12, color: '#1a9e8f',
-            marginBottom: 12, marginTop: -8,
+            fontSize: 12, color: 'var(--status-text)',
+            marginBottom: 14, marginTop: -8,
             display: 'flex', alignItems: 'center', gap: 6
           }}>
-            <span>Showing events for: <strong>{selectedGrades.join(', ')} Grade</strong></span>
-            <span style={{ color: '#aaa' }}>· School-wide events always shown</span>
+            <span>Showing: <strong>{selectedGrades.join(', ')} Grade</strong></span>
+            <span style={{ color: 'var(--text-faint)' }}>· School-wide events always shown</span>
           </div>
         )}
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: 40, color: '#888' }}>
+          <div style={{
+            textAlign: 'center', padding: 48, color: 'var(--text-faint)',
+            background: 'var(--card)', borderRadius: 16,
+            border: '1px solid var(--card-border)'
+          }}>
             Loading events...
           </div>
         ) : events.length === 0 ? (
           <div style={{
-            textAlign: 'center', padding: 40, color: '#888',
-            background: 'white', borderRadius: 12,
-            boxShadow: '0 1px 3px rgba(0,0,0,0.08)'
+            textAlign: 'center', padding: '48px 20px',
+            background: 'var(--card)', borderRadius: 16,
+            border: '1px solid var(--card-border)'
           }}>
-            <div style={{ fontSize: 40, marginBottom: 12 }}>📭</div>
-            <div style={{ fontWeight: 600, marginBottom: 8 }}>No events yet</div>
-            <div style={{ fontSize: 14 }}>Check back soon — Danny will sync school emails regularly.</div>
+            <div style={{ fontSize: 44, marginBottom: 14 }}>📭</div>
+            <div style={{ fontWeight: 700, marginBottom: 8, fontSize: 17, color: 'var(--text)' }}>
+              No events yet
+            </div>
+            <div style={{ fontSize: 13, color: 'var(--text-muted)' }}>
+              Check back soon — Danny will sync school emails regularly.
+            </div>
           </div>
         ) : (
           <>
             {activeTab === 'week' && <ThisWeek events={filtered} />}
             {activeTab === 'calendar' && (
-              <Calendar
-                events={filtered}
-                selectedDay={selectedDay}
-                onSelectDay={setSelectedDay}
-              />
+              <Calendar events={filtered} selectedDay={selectedDay} onSelectDay={setSelectedDay} />
             )}
             {activeTab === 'list' && <EventList events={filtered} />}
           </>
